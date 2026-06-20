@@ -71,7 +71,7 @@ export function createOllamaProvider(endpoint?: string): LLMProvider {
           content,
           toolCalls: toolCalls && toolCalls.length > 0 ? toolCalls : undefined,
           usage: {
-            inputTokens: data.eval_count || 0,
+            inputTokens: data.prompt_eval_count || 0,
             outputTokens: data.eval_count || 0,
           },
         }
