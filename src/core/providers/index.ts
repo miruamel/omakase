@@ -1,6 +1,8 @@
 /**
  * Providers barrel file.
+ * @module core/providers
  */
+
 export * from './interface.ts'
 export * from './anthropic/index.ts'
 export * from './openai/index.ts'

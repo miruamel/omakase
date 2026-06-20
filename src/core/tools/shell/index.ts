@@ -1,4 +1,6 @@
 /**
- * Shell tools barrel file.
+ * *
+ * @module core/tools/shell
  */
+
 export * from './bash/index.ts'

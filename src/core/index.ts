@@ -1,4 +1,9 @@
 /**
+ * Barrel file.
+ * @module core
+ */
+
+/**
  * Core module barrel file.
  * Re-export semua core modules.
  * @packageDocumentation

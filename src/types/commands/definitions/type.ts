@@ -1,6 +1,6 @@
 /**
  * Tipe command: prompt (ke LLM), local (text), atau local-jsx (React)
- * @packageDocumentation
+ * @module types/commands/definitions/type
  */
 
 /**

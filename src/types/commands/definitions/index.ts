@@ -1,6 +1,6 @@
 /**
- * Command definitions exports.
- * @packageDocumentation
+ * Command definitions barrel.
+ * @module types/commands/definitions
  */
 
 export * from './type.ts'

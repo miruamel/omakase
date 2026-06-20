@@ -3,7 +3,7 @@
  * @module App
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Box, useInput } from 'ink'
 import { appState } from './core/state/AppStateStore.js'
 import { QueryEngine } from './core/engine/engine.js'

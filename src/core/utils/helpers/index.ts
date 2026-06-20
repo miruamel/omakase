@@ -1,6 +1,8 @@
 /**
- * Helpers barrel file.
+ * *
+ * @module core/utils/helpers
  */
+
 export * from './sleep.ts'
 export * from './retry.ts'
 export * from './debounce.ts'

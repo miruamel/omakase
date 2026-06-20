@@ -1,4 +1,6 @@
 /**
- * Memory service barrel file.
+ * *
+ * @module core/services/memory
  */
+
 export * from './manager/index.ts'

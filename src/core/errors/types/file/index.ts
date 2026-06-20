@@ -1,4 +1,6 @@
 /**
- * File error exports.
+ * *
+ * @module core/errors/types/file
  */
+
 export * from './file.ts'

@@ -1,4 +1,6 @@
 /**
- * Config service barrel file.
+ * *
+ * @module core/services/config
  */
+
 export * from './manager/index.ts'

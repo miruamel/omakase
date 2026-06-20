@@ -1,4 +1,9 @@
 /**
+ * Barrel file.
+ * @module core/services
+ */
+
+/**
  * Services barrel file.
  * Re-export semua services.
  * @packageDocumentation

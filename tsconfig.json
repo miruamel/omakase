@@ -12,7 +12,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "types": ["bun"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

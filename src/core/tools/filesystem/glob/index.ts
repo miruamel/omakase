@@ -1,4 +1,6 @@
 /**
- * Glob tool exports.
+ * *
+ * @module core/tools/filesystem/glob
  */
+
 export * from './tool.ts'

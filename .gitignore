@@ -42,3 +42,11 @@ coverage/
 tmp/
 temp/
 *.tmp
+
+# Local artifacts
+final.pt
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3

@@ -1,4 +1,6 @@
 /**
- * TodoWrite tool exports.
+ * *
+ * @module core/tools/utility/todo
  */
+
 export * from './tool.ts'
