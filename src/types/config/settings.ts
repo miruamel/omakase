@@ -1,11 +1,7 @@
 /**
- * User settings type.
+ * User settings types.
  * @module types/config/settings
  */
 
-import type { OmakaseConfig } from './omakase/config.ts'
-
-/**
- * User settings interface.
- */
-export type UserSettings = OmakaseConfig
+export { OmakaseConfig, OmakaseConfigSchema } from './omakase/config.ts'
+export type { OmakaseConfig as UserSettings } from './omakase/config.ts'

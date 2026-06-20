@@ -5,7 +5,7 @@
 
 import React from 'react'
 import { Box, Text } from 'ink'
-import type { UserSettings } from '../../../types/config/settings/index.js'
+import type { UserSettings } from '../../../types/config/settings.ts'
 
 interface HeaderProps {
   settings: UserSettings

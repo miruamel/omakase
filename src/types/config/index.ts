@@ -1,7 +1,7 @@
 /**
- * Config barrel file.
+ * Config types barrel.
  * @module types/config
  */
 
-export type { OmakaseConfig } from './omakase/config.ts'
-export type { UserSettings } from './settings.ts'
+export { OmakaseConfig, OmakaseConfigSchema } from './omakase/config.ts'
+export type { OmakaseConfig as UserSettings } from './settings.ts'
