@@ -10,7 +10,8 @@
     "start": "bun run src/entrypoints/cli.tsx",
     "dev": "bun run --watch src/entrypoints/cli.tsx",
     "build": "bun build src/entrypoints/cli.tsx --outdir ./dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",
