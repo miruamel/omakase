@@ -27,14 +27,20 @@ export class ConfigManager {
   async load(): Promise<OmakaseConfig> {
     try {
       await access(this.configPath)
+    } catch {
+      logger.debug('Config not found, using defaults', { path: this.configPath })
+      return OmakaseConfigSchema.parse({})
+    }
+
+    try {
       const content = await readFile(this.configPath, 'utf-8')
       const parsed = JSON.parse(content)
       const validated = OmakaseConfigSchema.parse(parsed)
       logger.debug('Config loaded', { path: this.configPath })
       return validated
     } catch (error) {
-      logger.debug('Config not found, using defaults', { path: this.configPath })
-      return OmakaseConfigSchema.parse({})
+      logger.error('Config file is invalid', error as Error, { path: this.configPath })
+      throw new Error(`Invalid config file: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
