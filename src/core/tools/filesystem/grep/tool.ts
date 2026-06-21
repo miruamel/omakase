@@ -5,6 +5,7 @@
 
 import { z } from 'zod'
 import { readFile } from 'fs/promises'
+import { join } from 'path'
 import { glob as globFn } from 'glob'
 import { buildTool } from '../../base/builder/builder.ts'
 import type { ToolResult } from '../../../../types/messages/tool-result.ts'
@@ -27,16 +28,18 @@ export const GrepTool = buildTool({
   async call(args: any, context: ToolContext): Promise<ToolResult> {
     try {
       const { pattern, path, include } = args as { pattern: string; path?: string; include?: string }
-      
-      const files = path ? [path] : await globFn(include || '**/*', { nodir: true })
+
+      const cwd = context.workingDirectory
+      const relativeFiles = path ? [path] : await globFn(include || '**/*', { cwd, nodir: true })
+      const files = path ? [path] : relativeFiles.map(f => join(cwd, f))
       const results: Array<{ file: string; line: number; match: string }> = []
       const regex = new RegExp(pattern)
-      
+
       for (const file of files) {
         try {
           const content = await readFile(file, 'utf-8')
           const lines = content.split('\n')
-          
+
           for (let i = 0; i < lines.length; i++) {
             if (regex.test(lines[i])) {
               results.push({ file, line: i + 1, match: lines[i] })
@@ -47,7 +50,7 @@ export const GrepTool = buildTool({
           continue
         }
       }
-      
+
       return {
         toolCallId: crypto.randomUUID(),
         success: true,
