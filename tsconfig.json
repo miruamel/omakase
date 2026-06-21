@@ -13,7 +13,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "rootDir": "./src",
-    "types": ["bun"]
+    "types": ["bun", "node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

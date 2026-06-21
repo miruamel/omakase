@@ -61,11 +61,14 @@ export function createOpenAIProvider(apiKey: string): LLMProvider {
 
         const content = response.choices[0]?.message?.content || ''
 
-        const toolCalls = response.choices[0]?.message?.tool_calls?.map(tc => ({
-          id: tc.id,
-          name: tc.function?.name || '',
-          input: JSON.parse(tc.function?.arguments || '{}'),
-        }))
+        const toolCalls = response.choices[0]?.message?.tool_calls?.map(tc => {
+          const toolCall = tc as any
+          return {
+            id: toolCall.id,
+            name: toolCall.function?.name || '',
+            input: JSON.parse(toolCall.function?.arguments || '{}'),
+          }
+        })
 
         return {
           content,
