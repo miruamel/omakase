@@ -26,12 +26,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Ollama token usage: inputTokens now uses prompt_eval_count (was eval_count)
 - ConfigManager.load: now throws on invalid JSON (was silently returning defaults)
+- MemoryManager.list: now throws on invalid JSON (was silently returning empty)
 - Removed empty internal/ directories (60+ dirs)
 - Removed broken {manager}, {bash} directories with literal braces
 - Fixed broken .js imports in core/utils/index.ts
 - Added @types/bun for Bun.spawn type support
 - Removed misleading anthropic/interface.ts (was throwing 'Not implemented')
 - Removed unused useEffect import in App.tsx
+- Replaced console.log with logger in cli.tsx and exit.ts
+- Fixed process.exit(1) in App.tsx useState initializer (now throws)
+- Fixed build script: added --target node --external react-devtools-core
 
 ### Security
 - Plugin manager validates source format before execution
