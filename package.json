@@ -9,7 +9,7 @@
   "scripts": {
     "start": "bun run src/entrypoints/cli.tsx",
     "dev": "bun run --watch src/entrypoints/cli.tsx",
-    "build": "bun build src/entrypoints/cli.tsx --outdir ./dist",
+    "build": "bun build src/entrypoints/cli.tsx --outdir ./dist --target node --external react-devtools-core",
     "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
