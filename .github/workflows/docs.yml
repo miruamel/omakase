@@ -36,7 +36,7 @@ jobs:
           cp LICENSE-MIT _site/LICENSE-MIT
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
