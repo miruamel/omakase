@@ -1,0 +1,8 @@
+{
+  "name": "plugin-hello",
+  "version": "1.0.0",
+  "description": "Example Omakase plugin that adds a /hello command",
+  "main": "index.js",
+  "author": "Omakase Team",
+  "license": "MIT"
+}
