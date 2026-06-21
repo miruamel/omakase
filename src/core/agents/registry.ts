@@ -32,11 +32,22 @@ export class AgentRegistry {
 
   /**
    * Daftarkan agent baru.
-   * 
+   *
    * @param config - Konfigurasi agent
    * @returns Instance agent yang didaftarkan
+   * @throws Error jika config tidak valid
    */
   register(config: AgentConfig): Agent {
+    if (!config.name || typeof config.name !== 'string') {
+      throw new Error('Agent name is required and must be a string')
+    }
+    if (!config.role || !['coordinator', 'worker', 'specialist', 'reviewer'].includes(config.role)) {
+      throw new Error(`Invalid agent role: ${config.role}. Must be one of: coordinator, worker, specialist, reviewer`)
+    }
+    if (this.agents.has(config.name)) {
+      throw new Error(`Agent with name "${config.name}" already exists`)
+    }
+
     const agent = new Agent(config, this.provider, this.toolRegistry)
     this.agents.set(config.name, agent)
     return agent

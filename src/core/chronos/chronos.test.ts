@@ -116,4 +116,53 @@ describe('Chronos', () => {
     await new Promise(resolve => setTimeout(resolve, 150))
     expect(executed).toBe(true)
   })
+
+  it('should throw on missing name', () => {
+    expect(() => chronos.schedule({
+      name: '',
+      type: 'once',
+      handler: () => {},
+    })).toThrow('name is required')
+  })
+
+  it('should throw on invalid type', () => {
+    expect(() => chronos.schedule({
+      name: 'test',
+      type: 'invalid' as any,
+      handler: () => {},
+    })).toThrow('Invalid task type')
+  })
+
+  it('should throw on missing handler', () => {
+    expect(() => chronos.schedule({
+      name: 'test',
+      type: 'once',
+      handler: undefined as any,
+    })).toThrow('handler is required')
+  })
+
+  it('should throw on interval without intervalMs', () => {
+    expect(() => chronos.schedule({
+      name: 'test',
+      type: 'interval',
+      handler: () => {},
+    })).toThrow('intervalMs')
+  })
+
+  it('should throw on cron without cronExpression', () => {
+    expect(() => chronos.schedule({
+      name: 'test',
+      type: 'cron',
+      handler: () => {},
+    })).toThrow('cronExpression')
+  })
+
+  it('should throw on negative maxExecutions', () => {
+    expect(() => chronos.schedule({
+      name: 'test',
+      type: 'once',
+      handler: () => {},
+      maxExecutions: -1,
+    })).toThrow('maxExecutions')
+  })
 })

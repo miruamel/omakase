@@ -83,4 +83,29 @@ describe('AgentRegistry', () => {
     registry.register({ name: 'agent-2', role: 'specialist' })
     expect(registry.size()).toBe(2)
   })
+
+  it('should throw on missing name', () => {
+    const provider = createMockProvider()
+    const tools = new Map<string, ToolDefinition>()
+    const registry = new AgentRegistry(provider, tools)
+
+    expect(() => registry.register({ name: '', role: 'worker' })).toThrow('name is required')
+  })
+
+  it('should throw on invalid role', () => {
+    const provider = createMockProvider()
+    const tools = new Map<string, ToolDefinition>()
+    const registry = new AgentRegistry(provider, tools)
+
+    expect(() => registry.register({ name: 'test', role: 'invalid' as any })).toThrow('Invalid agent role')
+  })
+
+  it('should throw on duplicate name', () => {
+    const provider = createMockProvider()
+    const tools = new Map<string, ToolDefinition>()
+    const registry = new AgentRegistry(provider, tools)
+
+    registry.register({ name: 'agent-1', role: 'worker' })
+    expect(() => registry.register({ name: 'agent-1', role: 'worker' })).toThrow('already exists')
+  })
 })

@@ -20,11 +20,31 @@ export class Chronos {
 
   /**
    * Jadwalkan task baru.
-   * 
+   *
    * @param config - Konfigurasi task
    * @returns Instance task yang dijadwalkan
+   * @throws Error jika config tidak valid
    */
   schedule(config: ChronosTaskConfig): ChronosTask {
+    if (!config.name || typeof config.name !== 'string') {
+      throw new Error('Task name is required and must be a string')
+    }
+    if (!config.type || !['once', 'interval', 'cron', 'delayed'].includes(config.type)) {
+      throw new Error(`Invalid task type: ${config.type}. Must be one of: once, interval, cron, delayed`)
+    }
+    if (typeof config.handler !== 'function') {
+      throw new Error('Task handler is required and must be a function')
+    }
+    if (config.type === 'interval' && (!config.intervalMs || config.intervalMs <= 0)) {
+      throw new Error('Interval tasks require a positive intervalMs')
+    }
+    if (config.type === 'cron' && !config.cronExpression) {
+      throw new Error('Cron tasks require a cronExpression')
+    }
+    if (config.maxExecutions !== undefined && config.maxExecutions < 0) {
+      throw new Error('maxExecutions must be non-negative')
+    }
+
     const id = config.id || crypto.randomUUID()
     const task: ChronosTask = {
       id,

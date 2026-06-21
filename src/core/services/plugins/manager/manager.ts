@@ -30,8 +30,16 @@ export class PluginManager {
    * @param name - Plugin name
    * @param source - Plugin source (npm package, git repo, local path)
    * @returns Plugin manifest yang diinstall
+   * @throws Error jika name kosong atau source tidak valid
    */
   async install(name: string, source?: string): Promise<PluginManifest> {
+    if (!name || typeof name !== 'string') {
+      throw new Error('Plugin name is required and must be a string')
+    }
+    if (name.includes('/') || name.includes('\\') || name.includes('..')) {
+      throw new Error('Plugin name contains invalid characters')
+    }
+
     logger.info('Installing plugin', { name, source })
 
     const targetDir = join(this.pluginsPath, name)
