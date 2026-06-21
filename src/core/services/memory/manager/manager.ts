@@ -48,13 +48,19 @@ export class MemoryManager {
   async list(): Promise<Record<string, string>> {
     try {
       await access(this.memoryPath)
+    } catch {
+      logger.debug('Memory file not found', { path: this.memoryPath })
+      return {}
+    }
+
+    try {
       const content = await readFile(this.memoryPath, 'utf-8')
       const lines = content.split('\n')
       const memories: Record<string, string> = {}
-      
+
       let currentKey: string | null = null
       let currentValue: string[] = []
-      
+
       for (const line of lines) {
         if (line.startsWith('### ')) {
           if (currentKey) {
@@ -66,15 +72,15 @@ export class MemoryManager {
           currentValue.push(line)
         }
       }
-      
+
       if (currentKey) {
         memories[currentKey] = currentValue.join('\n').trim()
       }
-      
+
       return memories
     } catch (error) {
-      logger.debug('Memory file not found', { path: this.memoryPath })
-      return {}
+      logger.error('Failed to read memory file', error as Error, { path: this.memoryPath })
+      throw new Error(`Failed to read memory: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
