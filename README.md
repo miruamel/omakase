@@ -242,4 +242,4 @@ Untuk plugin development, lihat [examples/README.md](examples/README.md).
 
 ## License
 
-MIT
+Dual licensed under [Apache 2.0](LICENSE) or [MIT](LICENSE-MIT) — choose whichever fits your needs.
