@@ -18,4 +18,6 @@ export interface ToolContext {
   workingDirectory: string
   /** Permission mode */
   permissionMode?: 'auto' | 'confirm' | 'readonly'
+  /** Callback to prompt user for confirmation */
+  promptUser?: (message: string) => Promise<boolean>
 }

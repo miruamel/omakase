@@ -111,10 +111,23 @@ export class QueryEngine {
         const permission = await tool.checkPermissions(toolCall.input)
         
         if (!permission.granted) {
-          return {
-            toolCallId: toolCall.id,
-            success: false,
-            error: permission.prompt || 'Permission denied',
+          // If promptUser callback is available, ask user for confirmation
+          if (context.promptUser && permission.prompt) {
+            const userApproved = await context.promptUser(permission.prompt)
+            
+            if (!userApproved) {
+              return {
+                toolCallId: toolCall.id,
+                success: false,
+                error: 'Permission denied by user',
+              }
+            }
+          } else {
+            return {
+              toolCallId: toolCall.id,
+              success: false,
+              error: permission.prompt || 'Permission denied',
+            }
           }
         }
       }

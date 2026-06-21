@@ -3,8 +3,8 @@
  * @module App
  */
 
-import React, { useState, useCallback } from 'react'
-import { Box, useInput } from 'ink'
+import React, { useState, useCallback, useRef } from 'react'
+import { Box, useInput, Text } from 'ink'
 import { appState } from './core/state/AppStateStore.js'
 import { QueryEngine } from './core/engine/engine.js'
 import { createAnthropicProvider } from './core/providers/anthropic/client.js'
@@ -57,6 +57,8 @@ export function App() {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
+  const [pendingPermission, setPendingPermission] = useState<string | null>(null)
+  const permissionResolverRef = useRef<((approved: boolean) => void) | null>(null)
   const settings = appState.getSettings()
   const session = appState.getSession()
 
@@ -178,11 +180,19 @@ export function App() {
       return acc
     }, {} as Record<string, any>)
 
+    const promptUser = (message: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        setPendingPermission(message)
+        permissionResolverRef.current = resolve
+      })
+    }
+
     for (const toolCall of toolCalls) {
       const result = await queryEngine.executeToolCall(toolCall, tools, {
         session: session!,
         workingDirectory: process.cwd(),
         permissionMode: settings.permissionMode,
+        promptUser,
       }) as any
 
       if (result.success && result.data !== undefined) {
@@ -204,6 +214,20 @@ export function App() {
   }, [queryEngine, session, settings.permissionMode])
 
   useInput((value, key) => {
+    if (pendingPermission && permissionResolverRef.current) {
+      if (value === 'y' || value === 'Y') {
+        permissionResolverRef.current(true)
+        permissionResolverRef.current = null
+        setPendingPermission(null)
+        return
+      } else if (value === 'n' || value === 'N') {
+        permissionResolverRef.current(false)
+        permissionResolverRef.current = null
+        setPendingPermission(null)
+        return
+      }
+    }
+
     if (key.return) {
       handleInput(input)
       setInput('')
@@ -220,6 +244,11 @@ export function App() {
     <Box flexDirection="column" padding={1}>
       <Header settings={settings} />
       <MessageList messages={messages} loading={loading} />
+      {pendingPermission && (
+        <Box borderStyle="round" borderColor="yellow" paddingX={1} marginY={1}>
+          <Text color="yellow">⚠ {pendingPermission} (y/n)</Text>
+        </Box>
+      )}
       <InputPrompt input={input} />
       <StatusBar state={appState.getState()} />
     </Box>
