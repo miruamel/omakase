@@ -5,6 +5,7 @@
 
 import type { ChronosTask, ChronosTaskConfig, ChronosTaskStatus } from '../../types/chronos/index.ts'
 import { logger } from '../services/logger/logger/logger.ts'
+import { getNextCronTime } from './cron-parser.ts'
 
 /**
  * Scheduler untuk background tasks dengan dukungan once, interval, delayed, dan cron.
@@ -63,7 +64,10 @@ export class Chronos {
       case 'interval':
         return now + (config.intervalMs || 1000)
       case 'cron':
-        return now + 60000
+        if (!config.cronExpression) {
+          throw new Error('Cron expression is required for cron tasks')
+        }
+        return getNextCronTime(config.cronExpression, now)
       default:
         return now
     }
@@ -107,10 +111,15 @@ export class Chronos {
       task.lastExecutedAt = Date.now()
       task.status = 'completed'
 
-      if (config.type === 'interval' && 
+      if (config.type === 'interval' &&
           (config.maxExecutions === undefined || task.executionCount < config.maxExecutions)) {
         task.status = 'pending'
         task.nextExecutionAt = Date.now() + (config.intervalMs || 1000)
+        this.startTask(id, config)
+      } else if (config.type === 'cron' &&
+                 (config.maxExecutions === undefined || task.executionCount < config.maxExecutions)) {
+        task.status = 'pending'
+        task.nextExecutionAt = getNextCronTime(config.cronExpression!, Date.now())
         this.startTask(id, config)
       } else if (config.type === 'once' || config.type === 'delayed') {
         this.timers.delete(id)
