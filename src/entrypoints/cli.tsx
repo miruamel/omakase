@@ -43,7 +43,7 @@ program
     }
 
     if (!options.interactive) {
-      console.log('Non-interactive mode not implemented yet')
+      logger.warn('Non-interactive mode not implemented yet')
       process.exit(0)
     }
 
