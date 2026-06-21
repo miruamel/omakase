@@ -233,6 +233,12 @@ Install plugin:
 - [ ] Better UI components
 - [ ] Cron expression parser untuk Chronos
 
+## Contributing
+
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk development setup dan guidelines.
+
+Untuk plugin development, lihat [examples/README.md](examples/README.md).
+
 ## License
 
 MIT
