@@ -69,9 +69,9 @@ export function App() {
       apiKey = process.env.ANTHROPIC_API_KEY
     } else if (providerName === 'openai') {
       apiKey = process.env.OPENAI_API_KEY
-    } else if (providerName === 'nvidia') {
-      apiKey = process.env.NVIDIA_API_KEY
-      endpoint = process.env.OMAKASE_NVIDIA_ENDPOINT || (settings as any).nvidiaEndpoint
+  } else if (providerName === 'nvidia') {
+    apiKey = process.env.NVIDIA_API_KEY
+    endpoint = process.env.OMAKASE_NVIDIA_ENDPOINT || settings.nvidiaEndpoint
     } else if (providerName === 'ollama') {
       endpoint = process.env.OMAKASE_OLLAMA_ENDPOINT
     }

@@ -1,0 +1,20 @@
+# Code owners
+
+# Default owners
+* @miruamel
+
+# Core engine
+/src/core/engine/ @miruamel
+/src/core/runtime/ @miruamel
+
+# Providers
+/src/core/providers/ @miruamel
+
+# Security-sensitive
+/src/core/tools/shell/ @miruamel
+/src/core/tools/filesystem/write/ @miruamel
+/src/core/services/plugins/ @miruamel
+
+# CI/CD
+/.github/ @miruamel
+/scripts/ @miruamel

@@ -1,5 +1,11 @@
 # Omakase
 
+[![CI](https://github.com/miruamel/omakase/actions/workflows/ci.yml/badge.svg)](https://github.com/miruamel/omakase/actions/workflows/ci.yml)
+[![Release](https://github.com/miruamel/omakase/actions/workflows/release.yml/badge.svg)](https://github.com/miruamel/omakase/actions/workflows/release.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0%20OR%20MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/miruamel/omakase/releases)
+[![Bun](https://img.shields.io/badge/runtime-Bun-f9f1e1.svg)](https://bun.sh)
+
 AI coding assistant CLI — terinspirasi dari arsitektur Claude Code, tapi dibangun dari nol sebagai sistem independen dengan multi-provider, multi-agent, dan scheduler.
 
 ## Nama
@@ -40,6 +46,18 @@ User Input → CLI Parser → QueryEngine → LLM Provider → Tool Loop → Ter
 | **Runtime** | `src/core/runtime/` | Shared singletons untuk agents/chronos/coordinator |
 
 ## Install
+
+### Dari Release (Recommended)
+
+```bash
+# Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/miruamel/omakase/main/scripts/install.sh | bash
+
+# Windows (PowerShell)
+iwr -useb https://raw.githubusercontent.com/miruamel/omakase/main/scripts/install.ps1 | iex
+```
+
+### Dari Source
 
 ```bash
 # Install dependencies
