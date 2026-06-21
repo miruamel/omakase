@@ -225,6 +225,7 @@ Install plugin:
 - [x] Multi-agent system (Agent, Registry, Coordinator)
 - [x] Chronos scheduler (once, interval, delayed)
 - [x] Plugin manager (install/uninstall/load)
+- [x] Cron expression parser untuk Chronos
 - [ ] MCP client
 - [ ] IDE bridge (VS Code extension)
 - [ ] More tools (LSP, WebFetch, WebSearch)

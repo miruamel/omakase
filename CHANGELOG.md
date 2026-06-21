@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Cron expression parser for Chronos (5-field: minute hour day month weekday)
+- 11 tests for cron parser
+- CONTRIBUTING.md with development setup
+- examples/plugin-hello example plugin
+
 ## [0.1.0] - 2026-06-21
 
 ### Added
