@@ -85,4 +85,54 @@ describe('PluginManager', () => {
       manager.install('test', 'unknown-format')
     ).rejects.toThrow('Unknown source format')
   })
+
+  it('should load plugin from manifest', async () => {
+    const pluginDir = join(tempDir, 'test-plugin')
+    await mkdir(pluginDir, { recursive: true })
+    await writeFile(
+      join(pluginDir, 'plugin.json'),
+      JSON.stringify({
+        name: 'test-plugin',
+        version: '1.0.0',
+        description: 'Test plugin',
+        main: 'index.js',
+      })
+    )
+    await writeFile(
+      join(pluginDir, 'index.js'),
+      'export default { hello: "world" };'
+    )
+
+    const module = await manager.load({
+      name: 'test-plugin',
+      version: '1.0.0',
+      description: 'Test plugin',
+      main: 'index.js',
+    })
+
+    expect(module.default).toEqual({ hello: 'world' })
+  })
+
+  it('should throw when plugin entry not found', async () => {
+    const pluginDir = join(tempDir, 'missing-entry')
+    await mkdir(pluginDir, { recursive: true })
+    await writeFile(
+      join(pluginDir, 'plugin.json'),
+      JSON.stringify({
+        name: 'missing-entry',
+        version: '1.0.0',
+        description: 'Missing entry',
+        main: 'nonexistent.js',
+      })
+    )
+
+    await expect(
+      manager.load({
+        name: 'missing-entry',
+        version: '1.0.0',
+        description: 'Missing entry',
+        main: 'nonexistent.js',
+      })
+    ).rejects.toThrow('Plugin entry not found')
+  })
 })
