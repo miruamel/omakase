@@ -12,6 +12,9 @@ import { logger } from '../../logger/logger/logger.ts'
  */
 export class MemoryManager {
   private memoryPath: string
+  private cache: Record<string, string> | null = null
+  private cacheTimestamp: number = 0
+  private cacheTTL: number = 5000 // 5 seconds
 
   constructor(memoryPath?: string) {
     this.memoryPath = memoryPath || join(process.cwd(), 'OMAKASE.md')
@@ -19,7 +22,7 @@ export class MemoryManager {
 
   /**
    * Add memory entry.
-   * 
+   *
    * @param key - Memory key
    * @param value - Memory value
    */
@@ -31,7 +34,7 @@ export class MemoryManager {
 
   /**
    * Get memory by key.
-   * 
+   *
    * @param key - Memory key
    * @returns Memory value atau undefined
    */
@@ -42,14 +45,21 @@ export class MemoryManager {
 
   /**
    * List semua memories.
-   * 
+   *
    * @returns Object dengan semua memories
    */
   async list(): Promise<Record<string, string>> {
+    const now = Date.now()
+    if (this.cache && (now - this.cacheTimestamp) < this.cacheTTL) {
+      return { ...this.cache }
+    }
+
     try {
       await access(this.memoryPath)
     } catch {
       logger.debug('Memory file not found', { path: this.memoryPath })
+      this.cache = {}
+      this.cacheTimestamp = now
       return {}
     }
 
@@ -77,7 +87,9 @@ export class MemoryManager {
         memories[currentKey] = currentValue.join('\n').trim()
       }
 
-      return memories
+      this.cache = memories
+      this.cacheTimestamp = now
+      return { ...memories }
     } catch (error) {
       logger.error('Failed to read memory file', error as Error, { path: this.memoryPath })
       throw new Error(`Failed to read memory: ${error instanceof Error ? error.message : String(error)}`)
@@ -86,15 +98,17 @@ export class MemoryManager {
 
   /**
    * Save memories ke file.
-   * 
+   *
    * @param memories - Memories untuk save
    */
   async save(memories: Record<string, string>): Promise<void> {
     const content = Object.entries(memories)
       .map(([key, value]) => `### ${key}\n\n${value}`)
       .join('\n\n')
-    
+
     await writeFile(this.memoryPath, content, 'utf-8')
+    this.cache = { ...memories }
+    this.cacheTimestamp = Date.now()
     logger.debug('Memory saved', { path: this.memoryPath })
   }
 
@@ -103,5 +117,15 @@ export class MemoryManager {
    */
   async clear(): Promise<void> {
     await writeFile(this.memoryPath, '', 'utf-8')
+    this.cache = {}
+    this.cacheTimestamp = Date.now()
+  }
+
+  /**
+   * Invalidate cache.
+   */
+  invalidateCache(): void {
+    this.cache = null
+    this.cacheTimestamp = 0
   }
 }
