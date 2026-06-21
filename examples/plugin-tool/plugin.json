@@ -1,0 +1,8 @@
+{
+  "name": "plugin-tool",
+  "version": "1.0.0",
+  "description": "Example plugin that adds a custom tool",
+  "main": "index.js",
+  "author": "Omakase Team",
+  "license": "Apache-2.0"
+}
