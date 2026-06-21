@@ -10,6 +10,8 @@ import type { Message } from '../../types/messages/message.ts'
 import type { ToolDefinition } from '../../types/tools/definition.ts'
 import type { ToolCall } from '../../types/messages/tool-call.ts'
 import type { ToolContext } from '../../types/tools/context.ts'
+import type { Session } from '../../types/messages/turn.ts'
+import { z } from 'zod'
 
 function createMockProvider(response: LLMResponse): LLMProvider {
   return {
@@ -24,6 +26,22 @@ function createFailingProvider(error: Error): LLMProvider {
     sendMessage: mock(async (): Promise<LLMResponse> => {
       throw error
     }),
+  }
+}
+
+function createMockSession(): Session {
+  return {
+    id: 'test-session',
+    startTime: Date.now(),
+    lastActivity: Date.now(),
+    messages: [],
+  }
+}
+
+function createMockContext(): ToolContext {
+  return {
+    session: createMockSession(),
+    workingDirectory: '/tmp',
   }
 }
 
@@ -99,20 +117,17 @@ describe('QueryEngine', () => {
       test_tool: {
         name: 'test_tool',
         description: 'Test tool',
-        inputSchema: { type: 'object', properties: {} },
-        call: mock(async () => ({ success: true, output: 'tool result' })),
+        inputSchema: z.object({}),
+        call: mock(async () => ({ toolCallId: 'call_1', success: true, data: 'tool result' })),
       },
     }
 
-    const context: ToolContext = {
-      sessionId: 'test',
-      workingDirectory: '/tmp',
-    }
+    const context = createMockContext()
 
     const result = await engine.executeToolCall(toolCall, tools, context)
 
     expect(result.success).toBe(true)
-    expect(result.output).toBe('tool result')
+    expect(result.data).toBe('tool result')
   })
 
   it('should return error for unknown tool', async () => {
@@ -126,10 +141,7 @@ describe('QueryEngine', () => {
     }
 
     const tools: Record<string, ToolDefinition> = {}
-    const context: ToolContext = {
-      sessionId: 'test',
-      workingDirectory: '/tmp',
-    }
+    const context = createMockContext()
 
     await expect(engine.executeToolCall(toolCall, tools, context)).rejects.toThrow('Tool not found')
   })
@@ -148,17 +160,14 @@ describe('QueryEngine', () => {
       failing_tool: {
         name: 'failing_tool',
         description: 'Failing tool',
-        inputSchema: { type: 'object', properties: {} },
+        inputSchema: z.object({}),
         call: mock(async () => {
           throw new Error('Tool failed')
         }),
       },
     }
 
-    const context: ToolContext = {
-      sessionId: 'test',
-      workingDirectory: '/tmp',
-    }
+    const context = createMockContext()
 
     const result = await engine.executeToolCall(toolCall, tools, context)
 
@@ -180,19 +189,16 @@ describe('QueryEngine', () => {
       restricted_tool: {
         name: 'restricted_tool',
         description: 'Restricted tool',
-        inputSchema: { type: 'object', properties: {} },
+        inputSchema: z.object({}),
         checkPermissions: mock(async () => ({
           granted: false,
           prompt: 'Permission required',
         })),
-        call: mock(async () => ({ success: true, output: 'should not run' })),
+        call: mock(async () => ({ toolCallId: 'call_1', success: true, data: 'should not run' })),
       },
     }
 
-    const context: ToolContext = {
-      sessionId: 'test',
-      workingDirectory: '/tmp',
-    }
+    const context = createMockContext()
 
     const result = await engine.executeToolCall(toolCall, tools, context)
 

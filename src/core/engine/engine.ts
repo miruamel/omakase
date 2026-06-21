@@ -8,6 +8,7 @@ import type { Message } from '../../types/messages/message.ts'
 import type { ToolDefinition } from '../../types/tools/definition.ts'
 import type { ToolCall } from '../../types/messages/tool-call.ts'
 import type { ToolContext } from '../../types/tools/context.ts'
+import type { ToolResult } from '../../types/messages/tool-result.ts'
 import type { LLMResponse } from '../providers/interface.ts'
 import { logger } from '../services/logger/logger/logger.ts'
 
@@ -97,7 +98,7 @@ export class QueryEngine {
     toolCall: ToolCall,
     tools: Record<string, ToolDefinition>,
     context: ToolContext
-  ) {
+  ): Promise<ToolResult> {
     const tool = tools[toolCall.name]
     
     if (!tool) {
@@ -111,6 +112,7 @@ export class QueryEngine {
         
         if (!permission.granted) {
           return {
+            toolCallId: toolCall.id,
             success: false,
             error: permission.prompt || 'Permission denied',
           }
@@ -132,6 +134,7 @@ export class QueryEngine {
       })
 
       return {
+        toolCallId: toolCall.id,
         success: false,
         error: error instanceof Error ? error.message : String(error),
       }

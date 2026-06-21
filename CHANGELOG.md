@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-21
+
 ### Added
 - Multi-agent system: Agent, AgentRegistry, Coordinator (sequential/parallel/adaptive)
 - Chronos scheduler: once, interval, delayed, cron tasks
@@ -15,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 9 tools: Bash, FileRead, FileWrite, Glob, Grep, TodoWrite, AskUser, Config, Memory
 - 8 commands: /help, /agents, /chronos, /clear, /config, /exit, /memory, /plugin
 - Plugin manager: install/uninstall/load from npm/git/local
-- 41 tests for Chronos, Agent, AgentRegistry, Runtime, PluginManager, ConfigManager
+- 72 tests for Chronos, Agent, AgentRegistry, Runtime, PluginManager, ConfigManager, MemoryManager, QueryEngine, Coordinator, AppStateStore
 - GitHub Actions CI workflow (typecheck, test, build)
 - JSDoc on all source files with @module tags
 

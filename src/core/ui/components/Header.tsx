@@ -18,7 +18,7 @@ export function Header({ settings }: HeaderProps) {
   return (
     <Box marginBottom={1} borderBottom>
       <Text bold color="blue">
-        Omakase v0.0.1
+        Omakase v0.1.0
       </Text>
       <Text dimColor>
         {' '}| {settings.provider}:{settings.model}

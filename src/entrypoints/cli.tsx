@@ -15,7 +15,7 @@ const program = new Command()
 program
   .name('omakase')
   .description('AI coding assistant CLI')
-  .version('0.0.1')
+  .version('0.1.0')
   .option('-c, --config <path>', 'Config file path')
   .option('-m, --model <model>', 'Model name')
   .option('-p, --provider <provider>', 'LLM provider (anthropic, openai, ollama, nvidia)')

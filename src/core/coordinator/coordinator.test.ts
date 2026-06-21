@@ -8,6 +8,7 @@ import { Coordinator } from './coordinator.ts'
 import { AgentRegistry } from '../agents/registry.ts'
 import type { LLMProvider, LLMResponse } from '../providers/interface.ts'
 import type { AgentConfig } from '../../types/agents/index.ts'
+import type { ToolDefinition } from '../../types/tools/definition.ts'
 
 function createMockProvider(response: LLMResponse): LLMProvider {
   return {
@@ -19,20 +20,24 @@ function createMockProvider(response: LLMResponse): LLMProvider {
 function createMockAgentConfig(name: string): AgentConfig {
   return {
     name,
-    role: 'coder',
-    description: `Mock agent ${name}`,
+    role: 'worker',
     systemPrompt: 'You are a mock agent',
   }
+}
+
+function createMockRegistry(provider: LLMProvider): AgentRegistry {
+  return new AgentRegistry(provider, new Map<string, ToolDefinition>())
 }
 
 describe('Coordinator', () => {
   it('should create coordinator with config', () => {
     const provider = createMockProvider({ content: '{}' })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
     const coordinator = new Coordinator(
       {
         name: 'test-coordinator',
         strategy: 'sequential',
+        agents: [],
       },
       registry,
       provider
@@ -57,13 +62,14 @@ describe('Coordinator', () => {
     })
 
     const provider = createMockProvider({ content: planJson })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
     registry.register(createMockAgentConfig('agent-1'))
 
     const coordinator = new Coordinator(
       {
         name: 'test',
         strategy: 'sequential',
+        agents: [createMockAgentConfig('agent-1')],
       },
       registry,
       provider
@@ -96,7 +102,7 @@ describe('Coordinator', () => {
     })
 
     const provider = createMockProvider({ content: planJson })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
     registry.register(createMockAgentConfig('agent-1'))
     registry.register(createMockAgentConfig('agent-2'))
 
@@ -104,6 +110,7 @@ describe('Coordinator', () => {
       {
         name: 'test',
         strategy: 'parallel',
+        agents: [createMockAgentConfig('agent-1'), createMockAgentConfig('agent-2')],
       },
       registry,
       provider
@@ -129,12 +136,13 @@ describe('Coordinator', () => {
     })
 
     const provider = createMockProvider({ content: planJson })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
 
     const coordinator = new Coordinator(
       {
         name: 'test',
         strategy: 'sequential',
+        agents: [],
       },
       registry,
       provider
@@ -150,13 +158,14 @@ describe('Coordinator', () => {
 
   it('should fallback to single-step plan on parse error', async () => {
     const provider = createMockProvider({ content: 'not valid json' })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
     registry.register(createMockAgentConfig('agent-1'))
 
     const coordinator = new Coordinator(
       {
         name: 'test',
         strategy: 'sequential',
+        agents: [createMockAgentConfig('agent-1')],
       },
       registry,
       provider
@@ -189,7 +198,7 @@ describe('Coordinator', () => {
     })
 
     const provider = createMockProvider({ content: planJson })
-    const registry = new AgentRegistry()
+    const registry = createMockRegistry(provider)
     registry.register(createMockAgentConfig('agent-1'))
     registry.register(createMockAgentConfig('agent-2'))
 
@@ -197,6 +206,7 @@ describe('Coordinator', () => {
       {
         name: 'test',
         strategy: 'adaptive',
+        agents: [createMockAgentConfig('agent-1'), createMockAgentConfig('agent-2')],
       },
       registry,
       provider
