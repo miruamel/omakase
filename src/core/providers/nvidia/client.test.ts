@@ -168,7 +168,7 @@ describe('NvidiaProvider', () => {
     const provider = createNvidiaProvider('test-key')
     const messages: Message[] = [{ role: 'user', content: 'Hi' }]
 
-    await expect(provider.sendMessage(messages)).rejects.toThrow('NVIDIA API error')
+    await expect(provider.sendMessage(messages)).rejects.toThrow('NVIDIA NIM API error')
   })
 
   it('should handle network error', async () => {
