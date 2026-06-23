@@ -13,7 +13,7 @@ describe('statusCommand', () => {
   })
 
   it('should return status text', async () => {
-    const result = await statusCommand.execute('', {} as any)
+    const result = await statusCommand.execute([], {} as any)
     expect(result.type).toBe('text')
     expect(result.content).toContain('Status')
     expect(result.content).toContain('Provider')

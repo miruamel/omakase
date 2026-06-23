@@ -4,6 +4,7 @@
  */
 
 import { z } from 'zod'
+import { logger } from '../../../services/logger/logger/logger.ts'
 import { exec } from 'child_process'
 import { buildTool } from '../../base/builder/builder.ts'
 import type { ToolResult } from '../../../../types/messages/tool-result.ts'
@@ -39,6 +40,7 @@ export const BashTool = buildTool({
     }
 
     return new Promise((resolve) => {
+    logger.debug('Executing Bash command', { command });
       exec(command, { cwd: workingDirectory, encoding: 'utf8' }, (error, stdout, stderr) => {
         if (error) {
           resolve({

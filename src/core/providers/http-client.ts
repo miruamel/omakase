@@ -3,9 +3,9 @@
  * @module core/providers/http-client
  */
 
-import type { Message } from '../../../types/messages/message.ts'
-import type { ToolDefinition } from '../../../types/tools/definition.ts'
-import type { ToolCall } from '../../../types/messages/tool-call.ts'
+import type { Message } from '../../types/messages/message.ts'
+import type { ToolDefinition } from '../../types/tools/definition.ts'
+import type { ToolCall } from '../../types/messages/tool-call.ts'
 
 /**
  * HTTP request options.

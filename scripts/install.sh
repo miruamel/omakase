@@ -42,6 +42,15 @@ echo "Downloading from $DOWNLOAD_URL..."
 TMP_FILE=$(mktemp)
 curl -fsSL "$DOWNLOAD_URL" -o "$TMP_FILE"
 
+# Ensure shebang is present (in case release asset is missing it)
+if ! head -1 "$TMP_FILE" | grep -q "^#!"; then
+    echo "Adding shebang to binary..."
+    TMP_WITH_SHEBANG=$(mktemp)
+    printf '#!/usr/bin/env node\n' > "$TMP_WITH_SHEBANG"
+    cat "$TMP_FILE" >> "$TMP_WITH_SHEBANG"
+    mv "$TMP_WITH_SHEBANG" "$TMP_FILE"
+fi
+
 # Make executable
 chmod +x "$TMP_FILE"
 

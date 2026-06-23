@@ -11,6 +11,7 @@ import { getNextCronTime } from '../../core/chronos/cron-parser.ts'
 import { mapMessages, mapTools, parseToolCalls } from '../../core/providers/http-client.ts'
 import type { LLMProvider } from '../../core/providers/interface.ts'
 import type { Message } from '../../types/messages/message.ts'
+import { z } from 'zod'
 import type { ToolDefinition } from '../../types/tools/definition.ts'
 
 describe('Benchmarks', () => {
@@ -152,7 +153,7 @@ describe('Benchmarks', () => {
       const tools: ToolDefinition[] = Array.from({ length: 100 }, (_, i) => ({
         name: `tool-${i}`,
         description: `Tool ${i}`,
-        inputSchema: { type: 'object', properties: {} },
+        inputSchema: z.object({ properties: z.record(z.string(), z.any()) }),
         call: async () => ({ toolCallId: 'test', success: true }),
       }))
 

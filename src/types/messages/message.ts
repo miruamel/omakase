@@ -8,7 +8,7 @@ import type { ToolCall } from './tool-call.ts'
 /**
  * Message role.
  */
-export type MessageRole = 'user' | 'assistant' | 'system'
+export type MessageRole = 'user' | 'assistant' | 'system' | 'tool'
 
 /**
  * Message interface.

@@ -11,7 +11,7 @@ import type {
   MCPToolResult,
   JSONRPCRequest,
   JSONRPCResponse,
-} from './types.ts'
+} from '../types.ts'
 
 /**
  * MCP client untuk connect ke MCP server.

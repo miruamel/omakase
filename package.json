@@ -10,7 +10,7 @@
   "scripts": {
     "start": "bun run src/entrypoints/cli.tsx",
     "dev": "bun run --watch src/entrypoints/cli.tsx",
-    "build": "bun build src/entrypoints/cli.tsx --outdir ./dist --target node --external react-devtools-core",
+    "build": "bun build src/entrypoints/cli.tsx --outdir ./dist --target node --banner '#!/usr/bin/env node'",
     "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
@@ -22,6 +22,7 @@
     "ink": "^7.1.0",
     "openai": "^6.44.0",
     "react": "^19.2.7",
+    "react-devtools-core": "^7.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

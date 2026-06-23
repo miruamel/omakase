@@ -13,7 +13,7 @@ describe('helpCommand', () => {
   })
 
   it('should return help text', async () => {
-    const result = await helpCommand.execute('', {} as any)
+    const result = await helpCommand.execute([], {} as any)
     expect(result.type).toBe('text')
     expect(result.content).toContain('Omakase')
     expect(result.content).toContain('/help')
@@ -23,7 +23,7 @@ describe('helpCommand', () => {
   })
 
   it('should list all providers', async () => {
-    const result = await helpCommand.execute('', {} as any)
+    const result = await helpCommand.execute([], {} as any)
     expect(result.content).toContain('anthropic')
     expect(result.content).toContain('openai')
     expect(result.content).toContain('ollama')
@@ -31,7 +31,7 @@ describe('helpCommand', () => {
   })
 
   it('should include usage examples', async () => {
-    const result = await helpCommand.execute('', {} as any)
+    const result = await helpCommand.execute([], {} as any)
     expect(result.content).toContain('Examples')
     expect(result.content).toContain('Usage')
   })

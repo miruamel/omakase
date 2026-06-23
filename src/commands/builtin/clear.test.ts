@@ -13,7 +13,7 @@ describe('clearCommand', () => {
   })
 
   it('should return success message', async () => {
-    const result = await clearCommand.execute('', {} as any)
+    const result = await clearCommand.execute([], {} as any)
     expect(result.type).toBe('text')
     expect(result.content).toContain('cleared')
   })

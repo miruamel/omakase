@@ -13,7 +13,7 @@ describe('toolsCommand', () => {
   })
 
   it('should list available tools', async () => {
-    const result = await toolsCommand.execute('', {} as any)
+    const result = await toolsCommand.execute([], {} as any)
     expect(result.type).toBe('text')
     expect(result.content).toContain('Available tools')
     expect(result.content).toContain('Bash')
