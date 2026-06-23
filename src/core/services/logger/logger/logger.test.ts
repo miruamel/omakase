@@ -33,7 +33,7 @@ describe('Logger', () => {
     const entry = mockOutput.write.mock.calls[0][0] as LogEntry
     expect(entry.level).toBe('debug')
     expect(entry.message).toBe('debug message')
-    expect(entry.data).toEqual({ key: 'value' })
+    expect(entry.data as object).toEqual({ key: 'value' })
   })
 
   it('should log info message', () => {
@@ -59,9 +59,9 @@ describe('Logger', () => {
     logger.error('error message', error)
     expect(mockOutput.write).toHaveBeenCalledTimes(1)
     const entry = mockOutput.write.mock.calls[0][0] as LogEntry
-    expect(entry.level).toBe('error')
-    expect(entry.data.error).toBe('test error')
-    expect(entry.data.stack).toBeDefined()
+    const data = entry.data as { error?: string; stack?: string }
+    expect(data.error).toBe('test error')
+    expect(data.stack).toBeDefined()
   })
 
   it('should respect log level filter', () => {
@@ -98,6 +98,6 @@ describe('Logger', () => {
     logger.error('error message')
     expect(mockOutput.write).toHaveBeenCalledTimes(1)
     const entry = mockOutput.write.mock.calls[0][0] as LogEntry
-    expect(entry.data.error).toBeUndefined()
+    expect((entry.data as { error?: string }).error).toBeUndefined()
   })
 })

@@ -19,5 +19,5 @@ export interface LogEntry {
   /** Log message */
   message: string
   /** Optional data */
-  data?: any
+  data?: unknown
 }

@@ -21,7 +21,7 @@ export class MCPClient {
   private process: ChildProcess | null = null
   private requestId: number = 0
   private pendingRequests: Map<number, {
-    resolve: (value: any) => void
+    resolve: (value: unknown) => void
     reject: (error: Error) => void
   }> = new Map()
   private buffer: string = ''
@@ -179,7 +179,7 @@ export class MCPClient {
         params,
       }
 
-      this.pendingRequests.set(id, { resolve, reject })
+      this.pendingRequests.set(id, { resolve: resolve as (value: unknown) => void, reject })
 
       const message = JSON.stringify(request) + '\n'
       this.process.stdin.write(message, (error) => {

@@ -16,22 +16,42 @@ import {
  * @param error - Error dari OpenAI SDK
  * @returns Appropriate Omakase error
  */
-export function handleOpenAIError(error: any): Error {
-  if (error.status === 401) {
-    return new AuthenticationError('Authentication failed. Check your API key.')
+export function handleOpenAIError(error: unknown): Error {
+  // Guard: check if error is an object with status property
+  if (error && typeof error === 'object' && 'status' in error) {
+    const e = error as Record<string, unknown>
+    if (e.status === 401) {
+      return new AuthenticationError('Authentication failed. Check your API key.')
+    }
+    if (e.status === 429) {
+      return new RateLimitError('Rate limit exceeded. Please wait and retry.')
+    }
+    if (e.code === 'timeout') {
+      return new TimeoutError('Request timeout.')
+    }
+    if (e.type === 'invalid_request_error' && typeof e.message === 'string') {
+      return new LLMError(`Invalid request: ${e.message}`)
+    }
   }
   
-  if (error.status === 429) {
-    return new RateLimitError('Rate limit exceeded. Please wait and retry.')
+  // Guard: check for timeout code
+  if (error && typeof error === 'object' && 'code' in error) {
+    const e = error as Record<string, unknown>
+    if (e.code === 'timeout') {
+      return new TimeoutError('Request timeout.')
+    }
   }
   
-  if (error.code === 'timeout') {
-    return new TimeoutError('Request timeout.')
+  // Extract message safely
+  let message = 'Unknown OpenAI error'
+  if (error && typeof error === 'object') {
+    if ('message' in error) {
+      const msg = (error as Record<string, unknown>).message
+      if (typeof msg === 'string') {
+        message = msg
+      }
+    }
   }
   
-  if (error.type === 'invalid_request_error') {
-    return new LLMError(`Invalid request: ${error.message}`)
-  }
-  
-  return new LLMError(error.message || 'Unknown OpenAI error')
+  return new LLMError(message)
 }
