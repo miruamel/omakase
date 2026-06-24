@@ -8,6 +8,7 @@ import type { Message } from '../../../types/messages/message.ts'
 import type { ToolDefinition } from '../../../types/tools/definition.ts'
 import { logger } from '../../services/logger/logger/logger.ts'
 import { handleOpenAIError } from './errors/handler.ts'
+import { DEFAULT_MODELS, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE, TIMEOUTS } from '../constants.ts'
 
 /**
  * Create OpenAI provider instance.
@@ -37,7 +38,7 @@ export function createOpenAIProvider(apiKey: string): LLMProvider {
         const client = new OpenAI({ apiKey })
 
         const response = await client.chat.completions.create({
-          model: 'gpt-4-turbo',
+          model: DEFAULT_MODELS.openai,
           messages: messages.map(m => ({
             role: m.role as 'user' | 'assistant' | 'system',
             content: m.content,
@@ -51,6 +52,8 @@ export function createOpenAIProvider(apiKey: string): LLMProvider {
             },
           })),
           tool_choice: tools && tools.length > 0 ? 'auto' : undefined,
+          max_tokens: DEFAULT_MAX_TOKENS.openai,
+          temperature: DEFAULT_TEMPERATURE,
         })
 
         logger.debug('OpenAI API response received', {
