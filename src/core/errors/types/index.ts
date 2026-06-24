@@ -13,3 +13,4 @@ export { RateLimitErrorClass as RateLimitError } from './rate-limit/rate-limit.t
 export { TimeoutErrorClass as TimeoutError } from './timeout/timeout.ts'
 export { ValidationErrorClass as ValidationError } from './validation/validation.ts'
 export { ToolErrorClass as ToolError } from './tool/tool.ts'
+export { TransientError, PermanentError } from './base/base.ts'

@@ -35,3 +35,29 @@ export const TIMEOUTS = {
   request: 30000, // 30 seconds
   connect: 10000, // 10 seconds
 } as const
+/**
+ * Retry configuration for transient errors
+ */
+export const RETRY_CONFIG = {
+  maxRetries: 3,
+  baseDelay: 1000, // 1 second base delay
+  maxDelay: 10000, // 10 seconds max delay
+  backoffMultiplier: 2, // exponential backoff
+} as const
+
+/**
+ * Agent default limits
+ */
+export const AGENT_LIMITS = {
+  maxSteps: 10,
+  defaultTimeout: 60000, // 60 seconds
+} as const
+
+/**
+ * Circuit breaker thresholds
+ */
+export const CIRCUIT_BREAKER = {
+  failureThreshold: 5,
+  resetTimeout: 30000, // 30 seconds
+  halfOpenMaxCalls: 3,
+} as const

@@ -3,7 +3,7 @@
  * @module core/errors/types/base
  */
 
-import type { OmakaseError } from '../../errors.ts'
+import { OmakaseError } from '../../errors.ts'
 
 /**
  * Error constructor type.
@@ -11,3 +11,15 @@ import type { OmakaseError } from '../../errors.ts'
 export type ErrorConstructor = new (message: string) => OmakaseError
 
 export { OmakaseError }
+
+export class TransientError extends OmakaseError {
+  constructor(message: string) {
+    super(message)
+  }
+}
+
+export class PermanentError extends OmakaseError {
+  constructor(message: string) {
+    super(message)
+  }
+}

@@ -94,3 +94,20 @@ export class ValidationError extends OmakaseError {
     super(message)
   }
 }
+/**
+ * Transient error - can be retried.
+ */
+export class TransientError extends OmakaseError {
+  constructor(message: string, public retryable: boolean = true) {
+    super(message)
+  }
+}
+
+/**
+ * Permanent error - should not be retried.
+ */
+export class PermanentError extends OmakaseError {
+  constructor(message: string) {
+    super(message)
+  }
+}
