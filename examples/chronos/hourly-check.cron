@@ -1,0 +1,13 @@
+# Hourly health check
+cron: "0 * * * *"
+name: "Hourly Health Check"
+command: "omakase-healthcheck --quick"
+timeout: 30000
+onError: "notify"
+
+# Description:
+# Performs a quick health check every hour.
+# Sends notification if any issues detected.
+
+# To install:
+# omakase /chronos install examples/chronos/hourly-check.cron

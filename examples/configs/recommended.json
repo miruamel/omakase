@@ -1,0 +1,22 @@
+{
+  "$schema": "../omakase.schema.json",
+  "provider": "anthropic",
+  "permissionMode": "approve",
+  "healthCheck": {
+    "enabled": true,
+    "interval": 30000
+  },
+  "memory": {
+    "enabled": true,
+    "file": "OMAKASE.md"
+  },
+  "agents": {
+    "maxConcurrent": 3,
+    "defaultTimeout": 60000
+  },
+  "chronos": {
+    "enabled": true,
+    "maxTasks": 10
+  },
+  "_comment": "Recommended configuration for production use"
+}

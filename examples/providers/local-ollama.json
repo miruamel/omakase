@@ -1,0 +1,15 @@
+{
+  "$schema": "../omakase.schema.json",
+  "provider": "ollama",
+  "ollamaEndpoint": "http://localhost:11434",
+  "healthCheck": {
+    "enabled": true,
+    "interval": 10000
+  },
+  "_comment": "Local LLM setup with Ollama",
+  "_requirements": [
+    "Install Ollama: https://ollama.ai",
+    "Pull a model: ollama pull llama2",
+    "Start Ollama: ollama serve"
+  ]
+}

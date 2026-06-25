@@ -1,0 +1,17 @@
+{
+  "$schema": "../omakase.schema.json",
+  "provider": "anthropic",
+  "fallbackProviders": ["openai", "ollama"],
+  "healthCheck": {
+    "enabled": true,
+    "interval": 30000,
+    "timeout": 5000
+  },
+  "circuitBreaker": {
+    "failureThreshold": 5,
+    "resetTimeout": 30000,
+    "halfOpenMaxCalls": 3
+  },
+  "_comment": "This configuration enables automatic failover",
+  "_usage": "If anthropic fails, automatically try openai, then ollama"
+}

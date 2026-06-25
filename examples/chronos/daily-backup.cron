@@ -1,0 +1,17 @@
+# Daily backup at 2 AM
+cron: "0 2 * * *"
+name: "Daily Backup"
+command: "bash scripts/backup.sh"
+timeout: 300000
+onError: "log"
+
+# Description:
+# This task performs a daily backup of your project.
+# Runs every day at 2:00 AM in the background.
+# If it fails, the error is logged but doesn't stop other tasks.
+
+# To install:
+# omakase /chronos install examples/chronos/daily-backup.cron
+
+# To view scheduled tasks:
+# omakase /chronos list
