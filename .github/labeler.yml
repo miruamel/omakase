@@ -1,0 +1,69 @@
+# GitHub labeler configuration
+# Automatically labels PRs based on file patterns
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - docs/**/*
+      - README.md
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - .github/workflows/**/*
+      - .github/actions/**/*
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/**/*.test.ts
+      - src/**/*.test.tsx
+      - tests/**/*
+
+core:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/**/*
+
+providers:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/providers/**/*
+
+resilience:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/resilience/**/*
+
+ui:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/ui/**/*
+      - src/App.tsx
+
+tools:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/tools/**/*
+
+agents:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/agents/**/*
+
+chronos:
+  - changed-files:
+    - any-glob-to-any-file:
+      - src/core/chronos/**/*
+
+examples:
+  - changed-files:
+    - any-glob-to-any-file:
+      - examples/**/*
+
+scripts:
+  - changed-files:
+    - any-glob-to-any-file:
+      - scripts/**/*

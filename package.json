@@ -12,7 +12,12 @@
     "dev": "bun run --watch src/entrypoints/cli.tsx",
     "build": "bun build src/entrypoints/cli.tsx --outdir ./dist --target node --banner '#!/usr/bin/env node'",
     "typecheck": "tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "format": "./scripts/format.sh",
+    "lint": "./scripts/lint.sh",
+    "validate": "./scripts/validate-resilience.sh",
+    "stats": "./scripts/show-stats.sh",
+    "release": "./scripts/release.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
@@ -30,5 +35,9 @@
     "@types/node": "^26.0.0",
     "@types/react": "^19.2.17",
     "typescript": "5.9.3"
-  }
+  },
+  "keywords": ["ai", "cli", "coding-assistant", "llm", "multi-agent", "automation"],
+  "author": "miruamel",
+  "repository": "github:miruamel/omakase",
+  "engines": {"bun": ">=1.0.0"}
 }

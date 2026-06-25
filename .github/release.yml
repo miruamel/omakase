@@ -1,0 +1,29 @@
+# Release notes template
+changelog:
+  categories:
+    - title: 🚀 New Features
+      labels:
+        - enhancement
+        - feature
+
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+        - fix
+
+    - title: 📚 Documentation
+      labels:
+        - documentation
+
+    - title: 🧪 Tests
+      labels:
+        - tests
+
+    - title: 🔧 Maintenance
+      labels:
+        - chore
+        - refactor
+
+    - title: Other Changes
+      labels:
+        - "*"

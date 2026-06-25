@@ -263,3 +263,25 @@ Untuk plugin development, lihat [examples/README.md](examples/README.md).
 ## License
 
 Licensed under [Apache 2.0](LICENSE). As an alternative, this software may be distributed under the terms of the MIT License — see the LICENSE file for details.
+
+## Scripts
+
+Quick commands for development:
+
+```bash
+# Development
+bun run dev              # Start development mode
+
+# Testing
+bun test                 # Run all tests
+bun test --coverage     # Run with coverage
+./scripts/validate-resilience.sh  # Validate resilience features
+
+# Code Quality
+./scripts/format.sh      # Format code
+./scripts/lint.sh        # Lint code
+./scripts/show-stats.sh  # Show project statistics
+
+# Release
+./scripts/release.sh     # Automated release process
+```

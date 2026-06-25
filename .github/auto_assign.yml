@@ -1,0 +1,10 @@
+# Auto-assign reviewers to PRs
+addReviewers: true
+addAssignees: author
+
+reviewers:
+  - miruamel
+
+numberOfReviewers: 1
+
+filterByCommitAuthor: true
