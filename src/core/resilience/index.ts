@@ -4,3 +4,4 @@
  */
 
 export * from './circuit-breaker.ts'
+export * from './provider-health.ts'
