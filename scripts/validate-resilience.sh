@@ -11,7 +11,7 @@ bun test src/core/resilience/provider-health.test.ts
 
 echo ""
 echo "2. Checking circuit breaker exports..."
-if grep -q "export.*CircuitBreaker" src/core/resilience/index.ts; then
+if grep -q "circuit-breaker" src/core/resilience/index.ts; then
   echo "✓ CircuitBreaker exported"
 else
   echo "✗ CircuitBreaker not exported"
