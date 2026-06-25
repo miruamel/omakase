@@ -8,10 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Provider Health System** with automatic failover
+  - Circuit breaker per provider (CLOSED → OPEN → HALF_OPEN states)
+  - Health check polling every 30 seconds
+  - Failover chain: Anthropic → OpenAI → Ollama → Nvidia
+  - Real-time provider status in StatusBar
+- ProviderHealthManager class with 20 unit tests
+- QueryEngine integration with automatic failover
+- Agent timeout handling with TimeoutError
 - Cron expression parser for Chronos (5-field: minute hour day month weekday)
 - 11 tests for cron parser
 - CONTRIBUTING.md with development setup
 - examples/plugin-hello example plugin
+
+### Changed
+- StatusBar displays healthy provider count (green/red indicator)
+- Provider failover logged for observability
+
+### Fixed
+- Provider health checks handle connection errors gracefully
+- Circuit breaker properly resets on manual enable
 
 ## [0.1.0] - 2026-06-21
 
