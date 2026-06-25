@@ -1,41 +1,48 @@
 ---
-name: Bug Report
+name: Bug report
 about: Create a report to help us improve
-title: "[Bug] "
+title: '[BUG] '
 labels: bug
+assignees: ''
 ---
 
-## Bug Description
-
+**Describe the bug**
 A clear and concise description of what the bug is.
 
-## Steps to Reproduce
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Run command '...'
+2. Provide input '...'
+3. See error
 
-1. 
-2. 
-3. 
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-## Expected Behavior
+**Actual behavior**
+What actually happened, including any error messages or logs.
 
-What you expected to happen.
+**Environment:**
+- OS: [e.g. Ubuntu 22.04, macOS 14.0]
+- Bun version: [run `bun --version`]
+- Omakase version: [run `omakase --version`]
+- Provider: [Anthropic/OpenAI/Ollama/Nvidia]
 
-## Actual Behavior
-
-What actually happened.
-
-## Environment
-
-- Omakase version: 
-- Bun version: 
-- OS: 
-- Provider: 
-
-## Logs
-
+**Logs**
 ```
 Paste relevant logs here
 ```
 
-## Additional Context
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
 
-Any other context about the problem.
+**Additional context**
+Add any other context about the problem here.
+
+**Possible Solution**
+If you have ideas on how to fix this, share them here.
+
+**Checklist**
+- [ ] I've searched for existing issues
+- [ ] I've tried the latest version
+- [ ] I've included environment details
+- [ ] I've checked the documentation
