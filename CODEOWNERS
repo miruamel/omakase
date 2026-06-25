@@ -1,0 +1,38 @@
+# Code owners for Omakase
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner
+* @miruamel
+
+# Core modules
+/src/core/ @miruamel
+/src/core/engine/ @miruamel
+/src/core/providers/ @miruamel
+/src/core/resilience/ @miruamel
+
+# Agents and orchestration
+/src/core/agents/ @miruamel
+/src/core/coordinator/ @miruamel
+/src/core/chronos/ @miruamel
+
+# Tools
+/src/core/tools/ @miruamel
+
+# UI components
+/src/core/ui/ @miruamel
+/src/App.tsx @miruamel
+
+# Tests
+/src/**/*.test.ts @miruamel
+/src/**/*.test.tsx @miruamel
+
+# Documentation
+/docs/ @miruamel
+*.md @miruamel
+
+# CI/CD and automation
+/.github/workflows/ @miruamel
+/scripts/ @miruamel
+
+# Examples
+/examples/ @miruamel

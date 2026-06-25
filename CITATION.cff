@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Omakase"
+abstract: "AI coding assistant CLI with multi-provider, multi-agent, and scheduler capabilities"
+authors:
+  - family-names: "miruamel"
+    given-names: ""
+    orcid: ""
+repository-code: "https://github.com/miruamel/omakase"
+version: "0.2.0"
+date-released: "2026-06-25"
+license: "Apache-2.0 OR MIT"
+keywords:
+  - "ai"
+  - "coding-assistant"
+  - "cli"
+  - "llm"
+  - "multi-agent"
+  - "automation"
+  - "typescript"
