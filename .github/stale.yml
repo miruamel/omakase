@@ -1,0 +1,16 @@
+# Stale issue/PR management
+daysUntilStale: 30
+daysUntilClose: 7
+exemptLabels:
+  - pinned
+  - security
+  - critical
+  - "in progress"
+staleLabel: stale
+markComment: >
+  This issue has been automatically marked as stale because it has not had
+  recent activity. It will be closed if no further activity occurs. Thank you
+  for your contributions!
+closeComment: >
+  This issue has been automatically closed due to inactivity. Please feel free
+  to reopen it or create a new one if this is still relevant.

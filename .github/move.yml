@@ -1,0 +1,8 @@
+# Auto-close duplicate issues
+close: true
+delay: 0
+output: |
+  Thanks for opening this issue! This appears to be a duplicate of an existing issue.
+  I'm closing this in favor of the original. Please follow the original issue for updates.
+  ---
+  *This is an automated action. Please contact a maintainer if you believe this is a mistake.*

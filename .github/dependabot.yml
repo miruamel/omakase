@@ -1,23 +1,50 @@
+# Dependabot configuration for auto-updating dependencies
 version: 2
 updates:
+  # Bun/Node dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
+      time: "09:00"
+      timezone: "Asia/Jakarta"
     open-pull-requests-limit: 10
     reviewers:
       - "miruamel"
     labels:
       - "dependencies"
+      - "automation"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      production-dependencies:
+        patterns:
+          - "@anthropic-ai/sdk"
+          - "openai"
+          - "chalk"
+          - "ink"
+          - "react"
+          - "zod"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        patterns:
+          - "@types/*"
+          - "typescript"
+        update-types:
+          - "minor"
+          - "patch"
 
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "miruamel"
     labels:
-      - "dependencies"
+      - "ci/cd"
+      - "automation"
+    commit-message:
+      prefix: "ci"

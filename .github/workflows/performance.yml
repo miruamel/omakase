@@ -1,0 +1,65 @@
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run benchmarks
+        run: |
+          echo "# Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## Startup Time" >> $GITHUB_STEP_SUMMARY
+          START=$(date +%s%N)
+          timeout 2s bun run src/entrypoints/cli.tsx --help >/dev/null 2>&1 || true
+          END=$(date +%s%N)
+          STARTUP_MS=$(( (END - START) / 1000000 ))
+          echo "- Cold start: ${STARTUP_MS}ms" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Type Check" >> $GITHUB_STEP_SUMMARY
+          START=$(date +%s%N)
+          bun run typecheck >/dev/null 2>&1 || true
+          END=$(date +%s%N)
+          TYPECHECK_MS=$(( (END - START) / 1000000 ))
+          echo "- Type check: ${TYPECHECK_MS}ms" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Suite" >> $GITHUB_STEP_SUMMARY
+          START=$(date +%s%N)
+          bun test >/dev/null 2>&1 || true
+          END=$(date +%s%N)
+          TEST_MS=$(( (END - START) / 1000000 ))
+          echo "- Full tests: ${TEST_MS}ms" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Build" >> $GITHUB_STEP_SUMMARY
+          START=$(date +%s%N)
+          bun run build >/dev/null 2>&1 || true
+          END=$(date +%s%N)
+          BUILD_MS=$(( (END - START) / 1000000 ))
+          echo "- Full build: ${BUILD_MS}ms" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check performance regression
+        run: |
+          echo "Checking for performance regressions..."
+          # Add regression checks here if baseline exists
