@@ -14,6 +14,7 @@ Selamat datang di dokumentasi Omakase — AI coding assistant CLI dengan multi-p
 - [Installation](installation.md)
 - [Configuration](configuration.md)
 - [Providers](providers.md)
+- [Resilience](resilience.md)
 - [Multi-Agent](multi-agent.md)
 - [Chronos Scheduler](chronos.md)
 - [Plugin Development](plugins.md)
