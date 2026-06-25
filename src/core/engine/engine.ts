@@ -10,7 +10,7 @@ import type { ToolCall } from '../../types/messages/tool-call.ts'
 import type { ToolContext } from '../../types/tools/context.ts'
 import type { ToolResult } from '../../types/messages/tool-result.ts'
 import type { LLMResponse } from '../providers/interface.ts'
-import { logger } from '../services/logger/logger/logger.ts'
+import { ProviderHealthManager } from '../resilience/provider-health.ts'
 
 /**
  * QueryEngine configuration.
@@ -29,16 +29,22 @@ export interface QueryEngineConfig {
  */
 export class QueryEngine {
   private provider: LLMProvider
+  private healthManager?: ProviderHealthManager
   private config: QueryEngineConfig
 
   /**
    * Create QueryEngine.
    * 
-   * @param provider - LLM provider
+   * @param provider - LLM provider atau ProviderHealthManager
    * @param config - Engine configuration
    */
-  constructor(provider: LLMProvider, config?: Partial<QueryEngineConfig>) {
-    this.provider = provider
+  constructor(providerOrHealthManager: LLMProvider | ProviderHealthManager, config?: Partial<QueryEngineConfig>) {
+    if (providerOrHealthManager instanceof ProviderHealthManager) {
+      this.healthManager = providerOrHealthManager
+      this.provider = { name: 'managed', sendMessage: async () => ({}) } as LLMProvider
+    } else {
+      this.provider = providerOrHealthManager
+    }
     this.config = {
       maxRetries: 3,
       retryDelay: 1000,
@@ -55,6 +61,27 @@ export class QueryEngine {
    * @returns LLM response
    */
   async sendMessage(messages: Message[], tools?: ToolDefinition[]): Promise<LLMResponse> {
+    if (this.healthManager) {
+      return this.healthManager.executeWithFailover(async provider => {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), this.config.timeout)
+
+        try {
+          const response = await provider.sendMessage(messages, tools)
+          clearTimeout(timeoutId)
+          logger.debug('Message sent successfully', {
+            provider: provider.name,
+            hasContent: !!response.content,
+            hasToolCalls: !!response.toolCalls,
+          })
+          return response
+        } catch (error) {
+          clearTimeout(timeoutId)
+          throw error
+        }
+      })
+    }
+
     let lastError: Error | null = null
 
     for (let attempt = 1; attempt <= this.config.maxRetries; attempt++) {
