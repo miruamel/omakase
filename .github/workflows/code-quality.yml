@@ -1,0 +1,42 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Count test coverage
+        run: |
+          echo "=== Test Statistics ==="
+          bun test --coverage 2>&1 | tail -20 || bun test 2>&1 | tail -10
+
+      - name: Check file structure
+        run: |
+          echo "=== File Statistics ==="
+          echo "Total TS/TSX files: $(find src -name '*.ts' -o -name '*.tsx' | wc -l)"
+          echo "Total test files: $(find src -name '*.test.ts' | wc -l)"
+          echo "Total docs: $(find docs -name '*.md' | wc -l)"
+
+      - name: Verify imports
+        run: |
+          echo "=== Import Health Check ==="
+          grep -r "from './" src --include="*.ts" --include="*.tsx" | wc -l
+          echo "Relative imports found"

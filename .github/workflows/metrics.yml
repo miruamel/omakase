@@ -1,0 +1,38 @@
+name: Project Metrics
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Every Monday
+  workflow_dispatch:
+
+jobs:
+  metrics:
+    name: Generate Metrics
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Calculate metrics
+        run: |
+          echo "# Project Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## Code Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "- Source files: $(find src -name '*.ts' -o -name '*.tsx' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- Test files: $(find src -name '*.test.ts' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- Documentation: $(find docs -name '*.md' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Recent Activity" >> $GITHUB_STEP_SUMMARY
+          git log --oneline --since="1 week ago" | wc -l | xargs -I {} echo "- Commits this week: {}" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Providers Supported" >> $GITHUB_STEP_SUMMARY
+          echo "- Anthropic (Claude)" >> $GITHUB_STEP_SUMMARY
+          echo "- OpenAI (GPT)" >> $GITHUB_STEP_SUMMARY
+          echo "- Ollama (Local)" >> $GITHUB_STEP_SUMMARY
+          echo "- NVIDIA NIM" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Resilience Features:** Circuit Breaker, Auto Failover, Health Checks" >> $GITHUB_STEP_SUMMARY
