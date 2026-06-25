@@ -8,6 +8,7 @@ import type { Message } from '../../types/messages/message.ts'
 import type { ToolDefinition } from '../../types/tools/definition.ts'
 import type { AgentConfig, AgentTask, AgentStatus } from '../../types/agents/index.ts'
 import { logger } from '../services/logger/logger/logger.ts'
+import { TimeoutError } from '../errors/errors.ts'
 
 /**
  * Agent yang dapat menjalankan task menggunakan LLM provider.
@@ -96,6 +97,7 @@ export class Agent {
       role: this.role,
     })
 
+      let timeoutId: any
     try {
       const messages: Message[] = [
         { role: 'system', content: this.systemPrompt },
@@ -103,7 +105,14 @@ export class Agent {
       ]
 
       const availableTools = this.getAvailableTools()
-      const response = await this.provider.sendMessage(messages, availableTools)
+      const responsePromise = this.provider.sendMessage(messages, availableTools)
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new TimeoutError(`Agent execution timed out after ${this.timeout}ms`))
+        }, this.timeout)
+      })
+      const response = await Promise.race([responsePromise, timeoutPromise])
+      if (timeoutId) clearTimeout(timeoutId)
 
       task.result = response.content || ''
       task.status = 'completed'
@@ -117,6 +126,7 @@ export class Agent {
 
       return task
     } catch (error) {
+      if (timeoutId) clearTimeout(timeoutId)
       task.error = error instanceof Error ? error.message : String(error)
       task.status = 'failed'
       task.completedAt = Date.now()
