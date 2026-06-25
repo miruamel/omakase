@@ -11,6 +11,7 @@ import type { ToolContext } from '../../types/tools/context.ts'
 import type { ToolResult } from '../../types/messages/tool-result.ts'
 import type { LLMResponse } from '../providers/interface.ts'
 import { ProviderHealthManager } from '../resilience/provider-health.ts'
+import { logger } from '../services/logger/logger/logger.ts'
 
 /**
  * QueryEngine configuration.
