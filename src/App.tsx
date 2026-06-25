@@ -17,6 +17,7 @@ import type { Message, ToolCall } from './types/messages/index.js'
 import { logger } from './core/services/logger/logger/logger.ts'
 import { Header, MessageList, InputPrompt, StatusBar } from './core/ui/components/index.js'
 import { RuntimeContext, setRuntime } from './core/runtime/index.ts'
+import { ProviderHealthManager } from './core/resilience/provider-health.ts'
 
 /**
  * Get provider by name.
@@ -58,11 +59,12 @@ export function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
   const [pendingPermission, setPendingPermission] = useState<string | null>(null)
+  const [providerStatus, setProviderStatus] = useState<Array<{ name: string; isHealthy: boolean }>>([])
   const permissionResolverRef = useRef<((approved: boolean) => void) | null>(null)
   const settings = appState.getSettings()
   const session = appState.getSession()
 
-  const [queryEngine] = useState(() => {
+  const [queryEngine, healthManager] = useState(() => {
     const providerName = settings.provider
     let apiKey: string | undefined
     let endpoint: string | undefined
@@ -72,23 +74,60 @@ export function App() {
     } else if (providerName === 'openai') {
       apiKey = process.env.OPENAI_API_KEY
   } else if (providerName === 'nvidia') {
-    apiKey = process.env.NVIDIA_API_KEY
-    endpoint = process.env.OMAKASE_NVIDIA_ENDPOINT || settings.nvidiaEndpoint
+      apiKey = process.env.NVIDIA_API_KEY
+      endpoint = process.env.OMAKASE_NVIDIA_ENDPOINT || settings.nvidiaEndpoint
     } else if (providerName === 'ollama') {
       endpoint = process.env.OMAKASE_OLLAMA_ENDPOINT
     }
 
     try {
-      const provider = getProvider(providerName, apiKey, endpoint)
+      const healthManager = new ProviderHealthManager({
+        providerOrder: ['anthropic', 'openai', 'ollama', 'nvidia'],
+        enableHealthCheck: true,
+        healthCheckInterval: 30000,
+      })
+
+      // Register all available providers
+      const providers = [
+        { name: 'anthropic', apiKey: process.env.ANTHROPIC_API_KEY },
+        { name: 'openai', apiKey: process.env.OPENAI_API_KEY },
+        { name: 'nvidia', apiKey: process.env.NVIDIA_API_KEY, endpoint: process.env.OMAKASE_NVIDIA_ENDPOINT || settings.nvidiaEndpoint },
+        { name: 'ollama', endpoint: process.env.OMAKASE_OLLAMA_ENDPOINT },
+      ]
+
+      for (const p of providers) {
+        if (p.apiKey || p.endpoint) {
+          const provider = getProvider(p.name, p.apiKey, p.endpoint)
+          healthManager.registerProvider(provider)
+        }
+      }
+
+      healthManager.startHealthChecks()
+
       const tools = listTools()
-      const runtime = new RuntimeContext(provider, tools)
+      const runtime = new RuntimeContext(healthManager.getProvider(providerName) || providers[0] as any, tools)
       setRuntime(runtime)
-      return new QueryEngine(provider)
+      
+      return [new QueryEngine(healthManager), healthManager]
     } catch (error) {
       logger.error('Failed to initialize provider', error as Error)
       throw error
     }
   })
+  // Update provider status periodically
+  React.useEffect(() => {
+    if (!healthManager) return
+
+    const updateProviderStatus = () => {
+      const statuses = healthManager.getProviderStatuses()
+      setProviderStatus(statuses.map(s => ({ name: s.name, isHealthy: s.isHealthy })))
+    }
+
+    updateProviderStatus()
+    const interval = setInterval(updateProviderStatus, 5000)
+
+    return () => clearInterval(interval)
+  }, [healthManager])
 
   const handleInput = useCallback(async (userMessage: string) => {
     if (!userMessage.trim()) return
@@ -249,8 +288,7 @@ export function App() {
           <Text color="yellow">⚠ {pendingPermission} (y/n)</Text>
         </Box>
       )}
-      <InputPrompt input={input} />
-      <StatusBar state={appState.getState()} />
+      <StatusBar state={appState.getState()} providerStatus={providerStatus} />
     </Box>
   )
 }
